@@ -47,6 +47,7 @@ def downHelper(i,arr,board,canEven,before,counter):
         return counter, True
     else:
         return counter, False
+    
 def leftHelper(i,arr,board,canEven,before,counter):
     arr=oddLeft(i,arr,board,canEven)
     board=updateBoard(arr,board)
@@ -58,9 +59,7 @@ def leftHelper(i,arr,board,canEven,before,counter):
         return counter, True
     else:
         return counter, False
-def change(arr):
-    for i in range(len(arr)):
-        arr[i][0]+=1
+    
 def Ham():
     rows,cols = ask()
     dimType = 0
@@ -86,11 +85,9 @@ def Ham():
     counter = "a"
     dirArr = [0,1,2,3]
     tempDir = dirArr[:]
-    '''
-    print('Arr before:',arr)
-    change(arr)
-    print('Arr after:',arr)
-    '''
+    plt.matshow(board)
+    plt.savefig('results/plot'+str(counter))
+    
     canEven = True
     while notFilled:
         before = len(arr)
