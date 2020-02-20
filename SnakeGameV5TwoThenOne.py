@@ -11,8 +11,69 @@ def ask():
     print("Example: 4x3")
     dimensions = input("Input:")
     return int(dimensions[:dimensions.find("x")]), int(dimensions[dimensions.find("x")+1:])
+
+def upHelper(i,arr,board,canEven,before,counter):
+    arr=oddUp(i,arr,board,canEven)
+    board=updateBoard(arr,board)
+    if len(arr)>before:
+        counter = counter + "a"
+        plt.matshow(board)
+        plt.savefig('results/plot'+str(counter))
+        #plt.show()
+        return counter, True
+    else:
+        return counter, False
+
+def rightHelper(i,arr,board,canEven,before,counter):
+    arr=oddRight(i,arr,board,canEven)
+    board=updateBoard(arr,board)
+    if len(arr)>before:
+        counter = counter + "a"
+        plt.matshow(board)
+        plt.savefig('results/plot'+str(counter))
+        #plt.show()
+        return counter, True
+    else:
+        return counter, False
+    
+def downHelper(i,arr,board,canEven,before,counter):
+    arr=oddDown(i,arr,board,canEven)
+    board=updateBoard(arr,board)
+    if len(arr)>before:
+        counter = counter + "a"
+        plt.matshow(board)
+        plt.savefig('results/plot'+str(counter))
+        #plt.show()
+        return counter, True
+    else:
+        return counter, False
+def leftHelper(i,arr,board,canEven,before,counter):
+    arr=oddLeft(i,arr,board,canEven)
+    board=updateBoard(arr,board)
+    if len(arr)>before:
+        counter = counter + "a"
+        plt.matshow(board)
+        plt.savefig('results/plot'+str(counter))
+        #plt.show()
+        return counter, True
+    else:
+        return counter, False
+def change(arr):
+    for i in range(len(arr)):
+        arr[i][0]+=1
 def Ham():
     rows,cols = ask()
+    dimType = 0
+    #evenByEven evenByOdd OddbyEven OddByOdd
+    if rows%2==0 and cols%2==0:
+        dimType = 0
+    if rows%2==0 and cols%2:
+        dimType = 1
+    elif rows%2 and cols%2==0:
+        dimType = 2
+    else:
+        dimType = 3
+        
     probArr = []
     #print('probArr:',probArr)
     board = np.zeros((rows,cols))
@@ -25,110 +86,52 @@ def Ham():
     counter = "a"
     dirArr = [0,1,2,3]
     tempDir = dirArr[:]
+    '''
+    print('Arr before:',arr)
+    change(arr)
+    print('Arr after:',arr)
+    '''
+    canEven = True
     while notFilled:
-
-        #plt.matshow(board)
-        #plt.savefig('results/plot'+str(counter))
-        #plt.show()
         before = len(arr)
-        canEatTwo = True
         #--------
-        if canEatTwo:
-            for i in range(len(arr)):
-                #print('i in for:',i)
-                arr=oddUp(i,arr,board,True)
-                board=updateBoard(arr,board)
-                if len(arr)>before:
-                    counter = counter + "a"
-                    plt.matshow(board)
-                    plt.savefig('results/plot'+str(counter))
-                    #plt.show()
+        for i in range(len(arr)):
+            if dimType == 2:
+                counter,testBreak = upHelper(i,arr,board,canEven,before,counter)
+                if testBreak:
                     break
-                    
-                arr=oddRight(i,arr,board,True)
-                board=updateBoard(arr,board)
-                if len(arr)>before:
-                    counter = counter + "a"
-                    plt.matshow(board)
-                    plt.savefig('results/plot'+str(counter))
-                    #plt.show()
+                counter, testBreak = rightHelper(i,arr,board,canEven,before,counter)
+                if testBreak:
                     break
-                    
-                arr=oddDown(i,arr,board,True)
-                board=updateBoard(arr,board)
-                if len(arr)>before:
-                    counter = counter + "a"
-                    plt.matshow(board)
-                    plt.savefig('results/plot'+str(counter))
-                    #plt.show()
+                counter, testBreak = leftHelper(i,arr,board,canEven,before,counter)
+                if testBreak:
                     break
+                if not canEven:
+                    counter, testBreak = downHelper(i,arr,board,canEven,before,counter)
+                    if testBreak:
+                        break
+            else:
+                counter,testBreak = upHelper(i,arr,board,canEven,before,counter)
+                if testBreak:
+                    break
+                counter, testBreak = rightHelper(i,arr,board,canEven,before,counter)
+                if testBreak:
+                    break
+                counter, testBreak = downHelper(i,arr,board,canEven,before,counter)
+                if testBreak:
+                    break
+                counter, testBreak = leftHelper(i,arr,board,canEven,before,counter)
+                if testBreak:
+                    break
+            
+        if canEven and before==len(arr):
+            canEven = False
                 
-                arr=oddLeft(i,arr,board,True)
-                board=updateBoard(arr,board)
-                if len(arr)>before:
-                    counter = counter + "a"
-                    plt.matshow(board)
-                    plt.savefig('results/plot'+str(counter))
-                    #plt.show()
-                    break
-
-        if canEatTwo and before==len(arr):
-            canEatTwo = False
-        if not canEatTwo:
-            for i in range(len(arr)):
-                arr=oddUp(i,arr,board,False)
-                board=updateBoard(arr,board)
-                if len(arr)>before:
-                    counter = counter + "a"
-                    plt.matshow(board)
-                    plt.savefig('results/plot'+str(counter))
-                    #plt.show()
-                    break
-                    
-                arr=oddRight(i,arr,board,False)
-                board=updateBoard(arr,board)
-                if len(arr)>before:
-                    counter = counter + "a"
-                    plt.matshow(board)
-                    plt.savefig('results/plot'+str(counter))
-                    #plt.show()
-                    break
-                    
-                arr=oddDown(i,arr,board,False)
-                board=updateBoard(arr,board)
-                if len(arr)>before:
-                    counter = counter + "a"
-                    plt.matshow(board)
-                    plt.savefig('results/plot'+str(counter))
-                    #plt.show()
-                    break
-                
-                arr=oddLeft(i,arr,board,False)
-                board=updateBoard(arr,board)
-                if len(arr)>before:
-                    counter = counter + "a"
-                    plt.matshow(board)
-                    plt.savefig('results/plot'+str(counter))
-                    #plt.show()
-                    break
-                #-----------------
-                    
-        #plt.matshow(board)
-        #plt.savefig('results/plot'+str(counter))
-        #plt.show()
-        #print('---------------------------------------------------------------------------------------------------')          
-        #--------
         if 0 not in board:
             notFilled = False
-        #if len(arr)==before and not choose2 and notFilled:
-            #print("Contains No Hamiltonian Cycle")
-            #break
+        
         if len(arr)==before:
             choose2 = False
-        #print('arr:',arr)
-    #print('arr:',arr)
-    #plt.matshow(board)
-    #plt.show()
 def updateBoard(arr,board):
     for i in range(len(arr)):
         board[arr[i][0]][arr[i][1]]=0.05*(i+1)
